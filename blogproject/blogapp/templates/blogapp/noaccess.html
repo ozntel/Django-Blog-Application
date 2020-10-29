@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} No Access {% endblock %}
+{% block header %} No Access {% endblock %}
+
+{% block content %}
+     <br>
+     <div class="jumbotron jumbotron-fluid">
+          <div class="container">
+          <h2 class="display-4 text-center">You don't have an access!</h2>
+          <p class="text-center">
+               Sorry, you don't have an access to this page.
+               Please go back to the previous page to continue browsing 
+
+               {% if not user.is_authenticated %}
+                    or login if you have an account registered.
+               {% else %}
+                    . If you think you should have an access, please reach out to me using 
+                    Contact page.
+               {% endif %}
+          </p>
+          <br>
+          <div class="text-center">
+               <a class="btn btn-primary" href="javascript:history.back()">Go Back</a>
+          </div>
+          </div>
+     </div>
+
+{% endblock %}

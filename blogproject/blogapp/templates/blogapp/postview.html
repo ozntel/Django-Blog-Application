@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %} {{ post.title }} {% endblock %}
+{% block header %} Post {% endblock %}
+
+{% block head_other %}
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row" style="margin-right: 1%; margin-left: 1%;">
+            <div class="col">
+                <!-- Title -->
+                <h1 class="mt-4">{{post.title}}</h1>
+
+                <!-- Author -->
+                <p class="lead">
+                    by {{ post.author.first_name }} {{ post.author.last_name }}
+                </p>
+        
+                <hr>
+        
+                <!-- Date/Time -->
+                <p>Posted on {{ post.post_date|date:'d F Y'}} at {{ post.post_date|date:'H:i' }}</p>
+        
+                <hr>
+
+                <p>
+                    {{ post.body|safe }}
+                </p>
+                <br/>
+    
+                <!-- Go Back -->
+                <div class="text-center">
+                    <a class="btn btn-primary mb-2" href="{% url 'blog:MainView' %}"> Go back </a>
+                    {% if post.author == request.user or request.user.is_superuser %}
+                        <a class="btn btn-primary mb-2" href="{% url 'blog:PostEditView' post.pk %}"> Edit Post</a>
+                    {% endif %}
+                </div>
+
+                <!-- Likes -->
+                <form action="{% url 'blog:LikePost' post.pk %}?next={% url 'blog:PostDetailView' post.pk %}#likebutton" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="post.id" value={{post.id}} class="btn btn-primary mb-2" id="likebutton">Like</button>
+                    {% if post.likes != 0 %}
+                        <b>- {{ post.likes }} like{{post.likes|pluralize}}</b>
+                    {% endif %}
+                </form>
+
+                <br>
+
+                <!-- Information: Your comment/like submitted -->
+                {% for message in messages %}
+                    <div class="alert alert-secondary" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                <!-- Comments Form -->
+                <div class="card my-4">
+                    <h5 class="card-header text-center">Leave a Comment</h5>
+                    <div class="card-body">
+                        <form method="POST" action="{% url 'blog:PostDetailView' post.pk %}#likebutton">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" placeholder="Your Name">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="3" name="comment" placeholder="Comment"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Old Comments -->
+                {% if comments %}
+                    <h3 class="text-center">Comments</h3> <br/>
+                    {% for comment in comments %}
+                    <div class="alert alert-secondary" role="alert">
+                        <div class="media mb-4">
+                            <div class="media-body" style="margin-top: 0.8em;">
+                                <h5 class="mt-0"><b>{{ comment.author }}</b></h5>
+                                <small>{{ comment.comment_date }}</small> <br/>
+                                <div style="height: 0.6em; width: auto;"></div>
+                                {{ comment.body }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

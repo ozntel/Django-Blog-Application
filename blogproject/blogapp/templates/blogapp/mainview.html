@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %} Blog Application {% endblock %}
+{% block header %} Blog Application {% endblock %}
+
+{% block content %}
+
+	{% for message in messages %}
+		<div class="alert alert-secondary" role="alert">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+    <div class="row">
+		
+        <div class="col">
+            <div class="d-inline-block">
+				<form method="GET">
+					<div class="form-row align-items-center">
+						<div class="col-auto my-1">
+							<select class="custom-select mr-sm-2" name="category">
+								<option value='All'>All Categories</option>
+
+								{% for cat in categories %}
+									<option value="{{ cat.name }}" {% if category == cat.name %} selected {% endif %} >{{cat.name}}</option>
+								{% endfor %}
+								
+							</select>
+						</div>
+						<div class="col-auto my-1">
+							<button type="submit" class="btn btn-secondary">Filter</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="float-right my-1">
+				<div class="btn-group">
+					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Actions
+					</button>
+					<div class="dropdown-menu dropdown-menu-right">
+						<a class="dropdown-item" href="{% url 'blog:MainView' %}">All Articles</a>
+						<a class="dropdown-item" href="{% url 'blog:MyArticlesView' %}">My Articles</a>
+						<a class="dropdown-item" href="{% url 'blog:PostCreateView' %}">Create Post</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div style="height: 1em; width: auto;"></div>
+
+		<div style="margin: 1em;">
+			<div class="card">
+				<div class="card-body">
+						<div class="col-md-12">
+						
+							{% for post in posts %}
+
+								<h4><a href="{% url 'blog:PostDetailView' post.pk %}">{{ post.title }}</a></h4>
+								
+								<p class="text-justify">{{ post.snippet }}</p>
+								
+								<div>
+									<span class="badge badge-secondary">
+										Posted on {{ post.post_date|date:'d F Y'}} at {{ post.post_date|date:'H:i' }}
+									</span>
+									<div class="float-right">
+										{% if view == 'MyArticlesView' %}
+											{% if post.visible == True %}
+												<span class="badge badge-success">Published</span> 
+											{% else %}
+												<span class="badge badge-danger">Not Published</span> 
+											{% endif %}
+										{% endif %}
+										<span class="badge badge-secondary">{{ post.category }}</span> 
+									</div>         
+								</div>
+								
+								<hr>
+							
+							{% endfor %}
+						</div>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %} Post Create/Edit {% endblock %}
+{% block header %} Post Create/Edit {% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        {{ form | crispy }}
+        <br>
+        <input class="btn btn-primary" type="submit" value="Submit">
+        <a class="btn btn-primary" href="{% url 'blog:MainView' %}">Cancel</a>
+    </form>
+
+    <script src="{% static '/js/post.js' %}"></script>
+
+    <script>
+        document.getElementById('id_snippet').style.height = "5em";
+    </script>
+{% endblock %}
