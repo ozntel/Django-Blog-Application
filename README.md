@@ -37,8 +37,8 @@ Within the database, as I mentioned, you will have sample posts, comments and ca
 You can initially use these credentials:
 
 ```
-**Username** : superuser
-**Password** : 123456
+Username : superuser
+Password : 123456
 ```
 
 or you can simply create a superuser for yourself using the following command:
@@ -52,6 +52,10 @@ The logic of the application is really simple. You have main view, where you can
 The same rule is applicable for comments. When the comment is submitted, the visible status is set to False and you need to change the status to True to make them visible in the page.
 
 I have a separate application created for notifications and both user and superuser receive a message from the system once a post or comment is submitted so that it can be approved immediately. 
+
+There is a separate page created, in which users can view their posts even though it is not approved yet. The status of the post is also visible in this specific page on the right bottom of post list element. 
+
+Within the project, I included also TINYMCE, which makes easier to edit the content. However, the link is created for me so please register to TINYMCE and get your own link. Otherwise, you will always receive a notification that your domain is not registered, however, you can still ignore this notification and use the editor. 
 
 In case you have any question, please feel free to use link <a href="https://www.ozan.pl/contact/">Ozan.pl Contact</a>. I will be happy to help if I am capable of.
 
