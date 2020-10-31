@@ -36,7 +36,7 @@
                 <!-- Go Back -->
                 <div class="text-center">
                     <a class="btn btn-primary mb-2" href="{% url 'blog:MainView' %}"> Go back </a>
-                    {% if post.author == request.user or request.user.is_superuser %}
+                    {% if post.author == request.user and not post.locked or request.user.is_superuser %}
                         <a class="btn btn-primary mb-2" href="{% url 'blog:PostEditView' post.pk %}"> Edit Post</a>
                     {% endif %}
                 </div>

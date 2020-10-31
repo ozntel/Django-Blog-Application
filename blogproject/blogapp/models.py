@@ -18,6 +18,7 @@ class Post(models.Model):
     category = models.ForeignKey('Category', null=True, on_delete=models.SET_NULL)
     visible = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
+    locked = models.BooleanField(default=False)
     def __str__(self):
         return self.title
     def get_absolute_url(self):

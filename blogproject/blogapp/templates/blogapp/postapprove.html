@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Approve Post {% endblock %}
+{% block header %} Approve Post {% endblock %}
+
+{% block content %}
+
+<br>
+
+<div class="jumbotron jumbotron-fluid">
+    {% if not post.visible %}
+        <div class="container">
+            <h3 class="display-4 text-center font-3em-oz">Are you sure you want to approve "{{ post.title }}"?</h2>
+            <br>
+            <div class="text-center">
+                <form method="post">
+                    {% csrf_token %}
+                    <input class="btn btn-primary black-button-oz" type="submit" value="Yes, approve.">
+                    <a class="btn btn-primary black-button-oz" href="javascript:history.back()">No, Go Back</a>
+                </form>
+            </div> 
+        </div>
+    {% else %}
+        <div class="container">
+            <h3 class="display-4 text-center font-3em-oz">Post is already visible in the blog. There is no need to approve.</h2> <br>
+            <div class="text-center">
+                <a class="btn btn-primary black-button-oz" href="javascript:history.back()">No, Go Back</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

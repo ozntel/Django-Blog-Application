@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %} Login {% endblock %}
+{% block header %} Login {% endblock %}
+
+{% block head_other %}
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+
+{% endblock %}
+
+{% block content %}
+  <br>
+  <div class="container h-100">
+    <div class="d-flex justify-content-center h-100">
+      <div class="user_card">
+        <div class="d-flex justify-content-center form_container">
+          <form method="POST" action="">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+              </div>
+              <input type="text" name="username" placeholder="Username..." class="form-control">
+            </div>
+            <div class="input-group mb-2">
+              <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-key"></i></span>
+              </div>
+                <input type="password" name="password" placeholder="Password..." class="form-control" >
+            </div>
+            <div class="half-divider-oz"></div>
+            <div class="d-flex justify-content-center mt-3 login_container">
+              <input class="btn btn-primary" type="submit" value="Login">
+            </div>
+          </form>
+
+        </div>
+
+        <p></p>
+        {% for message in messages %}
+          <div class="alert alert-danger" role="alert">
+              {{ message }}
+          </div>
+        {% endfor %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

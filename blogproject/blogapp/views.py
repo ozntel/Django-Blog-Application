@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
 from .models import Post, Comment, Category
+from django.contrib.auth import authenticate, login, logout
 
 def MainView(request):
     posts = Post.objects.filter(visible=True)
@@ -13,7 +16,7 @@ def MainView(request):
         if 'category' in request.GET:
             category = request.GET['category']
             if category != 'All':
-                posts = Post.objects.filter(category__name=category)
+                posts = Post.objects.filter(category__name=category, visible=True)
     ctx = {'posts' : posts.order_by('-post_date'), 'category' : category, 'categories' : categories}
     return render(request, 'blogapp/mainview.html', ctx)
 
@@ -39,6 +42,7 @@ def LikePost(request, pk):
     messages.info(request, 'I\'m glad you liked the article. Thank you for reading!')
     return redirect('blog:PostDetailView', pk)
 
+@method_decorator(login_required(), 'dispatch')
 class PostCreateView(CreateView):
     model = Post
     fields = ['title', 'body', 'snippet', 'category']
@@ -51,6 +55,7 @@ class PostCreateView(CreateView):
         messages.info(self.request, 'Your post is saved and sent for review. Once it is approved, it will be published.')
         return super(PostCreateView, self).form_valid(form)
 
+@method_decorator(login_required(), 'dispatch')
 class PostEditView(UpdateView):
     model = Post
     fields = ['title', 'body', 'snippet', 'category']
@@ -60,8 +65,9 @@ class PostEditView(UpdateView):
         if self.request.user.is_superuser:
             return qs
         else:
-            return qs.filter(author=self.request.user)
+            return qs.filter(author=self.request.user, locked=False)
 
+@login_required()
 def MyArticlesView(request):
     posts = Post.objects.filter(author=request.user)
     categories = []
@@ -80,3 +86,34 @@ def MyArticlesView(request):
 
 def NoAccess(request):
     return render(request, 'blogapp/noaccess.html')
+
+@login_required()
+@user_passes_test(lambda u:u.is_superuser, login_url='blog:NoAccess')
+def ApprovePost(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.method == 'POST':
+        post.visible = True
+        post.locked = True
+        post.save()
+        messages.info(request, 'Post is approved and visible in Ozan.pl blog page.')
+        return redirect('blog:MainView')
+    return render(request, 'blogapp/postapprove.html', {'post' : post})
+
+def LoginView(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None: 
+            login(request, user)
+            messages.success(request, 'You logged in successfully...')
+            return redirect('blog:MainView')
+        else:
+            messages.info(request, 'Username or Password is incorrect.')
+    ctx = {}
+    return render(request, 'login.html', ctx)
+
+def LogoutView(request):
+    messages.info(request, 'Successfully logged out...')
+    logout(request)
+    return redirect('blog:MainView')
