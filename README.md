@@ -67,6 +67,8 @@ The logic of the application is really simple:
 
 1. There is also a view, in which the user can edit the post that was created before. The edit option is only available to the owner of the post and all users, who have superuser status in the application.
 
+1. An additional view was created just for approving the posts that were written by page users. This view changes status to visible and lock the post for editing for all users except for superuser.
+
 1. Within the project, I included also TinyMCE, which makes it easier to edit the content. However, the link is created for me so please register to TinyMCE and get your own link. Otherwise, you will always receive a notification that your domain is not registered, however, you can still ignore this notification and use the editor.
 
 I have a separate application created to handle notifications. Both user and superuser receive a message from the system once a post or a comment is submitted. Then superuser can approve or delete if necessary.
