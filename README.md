@@ -6,7 +6,7 @@ I created a basic blog application in Django in case you would like to use as a 
 Just to make sure that you have something to view inside of the application, I also included db.sqlite3, which includes a few posts, comments and categories.
 In case you would like to see the live version of my blog application, you can always visit my page using the link: <a href="https://www.ozan.pl">Ozan.pl</a>.
 
-![ozan.pl_blog_app](https://www.ozan.pl/static/images/blog/blog_application.png)
+![https://s3.ozan.pl/media/public/ckuploads/blog_application.png](https://s3.ozan.pl/media/public/ckuploads/blog_application.png)
 
 To be able to use the blog application, you firstly need to clone in your local computer:
 
