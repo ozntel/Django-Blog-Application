@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
-from .models import Post, Comment, Category
+from .models import Post, Comment, Category,PostLiked
 from django.contrib.auth import authenticate, login, logout
 
 def MainView(request):
@@ -36,11 +36,18 @@ def PostDetailView(request, pk):
         return redirect('compapp:NoAccess')
 
 def LikePost(request, pk):
+    user = request.user
     post = Post.objects.get(pk=pk)
-    post.likes = post.likes + 1
-    post.save()
-    messages.info(request, 'I\'m glad you liked the article. Thank you for reading!')
-    return redirect('blog:PostDetailView', pk)
+    postlike = PostLiked.objects.filter(name=user,post_id=pk).exists()
+    if postlike:
+        return redirect('blog:PostDetailView', pk)
+    else:
+        likeduser = PostLiked.objects.create(name=user,post_id=pk)
+        likeduser.save()
+        post.likes = post.likes + 1
+        post.save()
+        messages.info(request, 'I\'m glad you liked the article. Thank you for reading!')
+        return redirect('blog:PostDetailView', pk)
 
 @method_decorator(login_required(), 'dispatch')
 class PostCreateView(CreateView):
