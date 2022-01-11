@@ -24,6 +24,12 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('blog:PostDetailView', args=[self.pk])
 
+
+class PostLiked(models.Model):
+    name = models.ForeignKey(User, on_delete=models.CASCADE)
+    post_id = models.CharField(max_length=(5),blank=True)
+
+
 class Comment(models.Model):
     body = models.TextField()
     author = models.CharField(max_length=128)

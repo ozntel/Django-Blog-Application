@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, Category
+from .models import Post, Comment, Category,PostLiked
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'get_full_name', 'post_date', 'category', 'nr_comments', 'likes', 'visible']
@@ -19,6 +19,13 @@ admin.site.register(Post, PostAdmin)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['author', 'post', 'comment_date', 'visible']
     search_fields = ['author', 'post__title']
+
+
+@admin.register(PostLiked)
+class PostLikedAdmin(admin.ModelAdmin):
+    list_display = ['name', 'post_id', ]
+    search_fields = ['name', 'post_id']
+
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
